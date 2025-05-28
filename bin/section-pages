@@ -1,0 +1,33 @@
+#!/bin/bash
+# Usage:
+#   section-count -f FILE.org | section-pages > page-count.org
+
+# Modify output from "section-count". Append page count, if the word
+# count is > 2500
+
+cat <<\EOF >/tmp/sp.tmp
+BEGIN {
+  CONVFMT = "%1.1f"
+}
+
+NF == 0 {
+  print $0
+  next
+}
+
+/^*/ {
+  if ($NF > 250) {
+    print $0, "(" $NF/250 " pages " $NF*100/250/440 "%)"
+  } else {
+    print $0
+  }
+}
+EOF
+
+echo '-*- mode: org -*-'
+awk -f /tmp/sp.tmp
+tErr=$?
+
+rm /tmp/sp.tmp
+
+exit $tErr

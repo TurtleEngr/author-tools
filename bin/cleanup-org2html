@@ -1,0 +1,43 @@
+#!/bin/bash
+# $Header: /repo/local.cvs/project/book-humane/bin/cleanup-org2html,v 1.3 2025/05/01 05:51:29 bruce Exp $
+
+# ----------------------------------------
+# Usage
+if [[ -t 0 ]]; then
+    cat <<EOF
+Usage:
+    clean-org <file.org >clean-file.org
+
+Description
+
+    The Libreoffice odt file has been saved to html with "Saved-as."
+    Then the html files is converted to an org file with pandoc.  This
+    script will cleanup the org file so it will work with the
+    org2html.sh script.
+
+EOF
+    exit 1
+fi
+
+# ----------------------------------------
+# Create scripts
+cat <<\EOF >/tmp/clean.sed
+    s/<<anchor>>//
+    s/<<[^<]*>>//
+    s/^- /+ /
+    s/#+BEGIN_QUOTE/<blockquote>/
+    s;#+END_QUOTE;</blockquote>;
+    s/“/"/g
+    s/\\\\//g
+EOF
+
+cat <<\EOF >/tmp/clean.awk
+    /:PROPERTIES:/,/:END:/ { next }
+    { print $0 }
+EOF
+
+# ----------------------------------------
+# Run the scripts
+sed -f /tmp/clean.sed | awk -f /tmp/clean.awk
+
+rm /tmp/clean.sed /tmp/clean.awk

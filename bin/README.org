@@ -1,0 +1,35 @@
+* Bibliography
+** Manually Generate Bibliography
+- Skipping the Bilibography section, collect all {} references
+- Remove all after ":" to "}" from the references
+- Sort the references and remove duplicates
+- Look references in MY-BIBLIO-final.txt, and output
+** Generate Bibliograpy in Libreoffice from references
+- Import MY-BIBLIO-final.txt into Libreoffice DB
+  - https://help.libreoffice.org/latest/ro/text/swriter/guide/indices_literature.html
+- For each "{TAG-NN}" or "{TAG-NN:LOC}" reference in the text,
+  manually highlight the TAG-NN reference and select the "short name"
+  in the biblio DB.
+
+- Script
+  - mkdir tmp
+  - cd tmp
+  - unzip -o ../FILE.odt
+  - process content.xml with xslt script
+  - Match "{TAG-NN}", (if found in MY-BIBLIO-final.txt) output:
+    - <text:span text:style-name="Footnote_20_Symbol">{</text:span>
+        <text:span text:style-name="Footnote_20_Symbol">
+          <text:bibliography-mark text:identifier="TAG-NN">TAG-NN</text:bibliography-mark>
+        </text:span>
+        <text:span text:style-name="Footnote_20_Symbol">}</text:span>
+
+  - Match "{TAG-NN:LOC}", (if found in MY-BIBLIO-final.txt) output:
+    - <text:span text:style-name="Footnote_20_Symbol">{</text:span>
+        <text:span text:style-name="Footnote_20_Symbol">
+          <text:bibliography-mark text:identifier="TAG-NN">TAG-NN</text:bibliography-mark>
+        </text:span>
+        <text:span text:style-name="Footnote_20_Symbol">:LOC}</text:span>
+  - zip -r ../FILE2.odt *
+  - libreoffice ../FILE2.odt
+    - repair and save to FILE2.odt
+- Add TOC bibliography section at end of doc

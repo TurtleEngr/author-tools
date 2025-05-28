@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+if [[ $# -ne 2 ]]; then
+    cat <<EOF
+Usage
+    mk-toc-simple.sh toc.html toc.txt [rev]
+Description
+    Generate a simple toc files from toc.html
+    If rev file is specified, this will be put at beginning of toc.txt
+    mk-toc-html should be run first.
+EOF
+    exit 1
+fi
+
+export Tmp="/tmp/$USER/book"
+
+pgIn=$1
+pgTxt=$2
+
+if [[ ! -f $pgIn ]]; then
+    echo "Error: missing $pgIn"
+    exit 1
+fi
+
+touch $pgTxt
+if [[ ! -f $pgTxt ]]; then
+    echo "Error: Could not create $pgTxt"
+    exit 1
+fi
+
+sed <$pgIn '
+    s|<pre>||;
+    s|</pre>||;
+    s|<a [^>]*>||g;
+    s|</a>|\n|g;
+    s|<cite>.*</cite>||g;
+    s|<b>||g;
+    s|</b>||g;
+    s|<p>||g;
+    s|</p>||g;
+' | fmt | rmnl >$pgTxt

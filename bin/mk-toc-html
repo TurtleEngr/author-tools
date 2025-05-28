@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+if [[ $# -lt 2 ]]; then
+    cat <<EOF
+Usage
+    mk-toc-simple.sh toc-file.html toc.html
+Description
+    Generate a simple toc files from file.html
+    If rev file is specified, this will be put at beginning of toc.html
+Optional:
+    Define the h levels
+    export cgLevel=12345
+EOF
+    exit 1
+fi
+
+export cgLevel=${cgLevel:-12345}
+export Tmp="/tmp/$USER/book"
+export cTidyOpt='-q -i -w 4000 -asxhtml --break-before-br no --indent-attributes no --indent-spaces 2 --tidy-mark no --vertical-space no'
+
+pgIn=$1
+pgHtml=$2
+
+if [[ ! -f $pgIn ]]; then
+    echo "Error: missing $pgIn"
+    exit 1
+fi
+
+touch $pgHtml
+if [[ ! -f $pgHtml ]]; then
+    echo "Error: Could not create $pgHtml"
+    exit 1
+fi
+
+if [[ $# -eq 3 ]]; then
+    pgRev=$3
+    if [[ ! -r $pgRev ]]; then
+        echo "Error: missing $pgRev"
+        exit 1
+    fi
+    cat $pgRev >$pgHtml
+fi
+
+echo '<pre>' >>$pgHtml
+tidy ${cTidyOpt} <$pgIn 2>/dev/null >$Tmp/t1.tmp
+grep "<h[${cgLevel}]" <$Tmp/t1.tmp >$Tmp/t2.tmp
+sed <$Tmp/t2.tmp "
+     s| id=\"| href=\"${pgIn##*/}#|;
+     s|.*<h1 |<a |;
+     s|.*<h2 |    <a |;
+     s|.*<h3 |        <a |;
+     s|.*<h4>|            - |;
+     s|.*<h5>|                - |;
+     s|</h.>|</a>|;
+" >>$pgHtml
+echo '</pre>' >>$pgHtml
