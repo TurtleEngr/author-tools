@@ -51,7 +51,7 @@ Increment version number in a version file
 
 =head1 SYNOPSIS
 
-    inver.sh [-M -m -p] [-s pChar] [-h] [-H pStyle] [[-f] FILE]
+    inver.sh [-M -m -p] [-s pChar] [-h] [-H pStyle] [-f FILE]
 
 =head1 DESCRIPTION
 
