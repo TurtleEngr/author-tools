@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# --------------------
+# Conf
+export cBiblioNote=~/ver/local/app/my-bib/biblio-note.org
+
+# --------------------
+# Usage
 if [[ -t 0 ]]; then
     cat <<EOF
 Usage:
@@ -8,9 +14,6 @@ Also requires: biblio-note.org
 EOF
     exit 1
 fi
-
-
-export cBiblioNote=~/ver/local/app/my-bib/biblio-note.org
 
 # --------------------
 # Build map array to biblio-note.html
@@ -27,13 +30,17 @@ echo '}' >>/tmp/mk-biblio.awk
 cat <<\EOF >>/tmp/mk-biblio.awk
 /^#/ { next }
 NF == 0 { next }
-/{.*-[0-9]*}/ {
+/{.*-[0-9]*}/ || $1 == "Id:" {
   if (tNote != "") {
     print "   + Annote: " tNote
   }
   tNote = ""
-  tId = $0
-  gsub(/[{}]/,"", tId)
+  if ($1 == "Id:") {
+    tId = $2
+  } else {
+    tId = $0
+    gsub(/[{}]/,"", tId)
+  }
   if (tId in tNoteList) {
     tNote = tNoteList[tId]
   }

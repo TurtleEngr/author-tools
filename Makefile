@@ -26,7 +26,32 @@ mUtilScripts = \
 # --------------------
 # Main Targets
 
-build : $(mUtilScripts)
+build : clean $(mUtilScripts)
+
+clean :
+	find . -name '*~' -exec rm {} \;
+
+ci checkin : build
+	bin/incver.sh -p VERSION
+	git ci -am Update
+
+save push : build
+	git co develop
+	git pull origin develop
+	bin/incver.sh -m VERSION
+	-git commit -am Update
+	git push --tags origin develop
+
+publish release : save
+	bin/incver.sh -M VERSION
+	git commit -am "Inc Ver"
+	git tag -f -F VERSION "v$$(cat VERSION)"
+	git push --tags origin develop
+	git co main
+	git pull origin main
+	git merge develop
+	git push --tags origin main
+	git co develop
 
 # --------------------
 # Rules
