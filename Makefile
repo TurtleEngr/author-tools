@@ -17,6 +17,7 @@ mUtilScripts = \
 	bin/mksymlink \
 	bin/org2html.sh \
 	bin/rmnl \
+	bin/section-count \
 	bin/shfmt \
 	bin/shunit2 \
 	bin/shunit2.1 \
