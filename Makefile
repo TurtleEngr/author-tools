@@ -33,18 +33,18 @@ clean :
 
 ci checkin : build
 	bin/incver.sh -p VERSION
-	git ci -am Update
+	-git ci -am Update
 
 save push : build
 	git co develop
 	git pull origin develop
 	bin/incver.sh -m VERSION
-	-git commit -am Update
+	-git ci -am Update
 	git push --tags origin develop
 
 publish release : save
 	bin/incver.sh -M VERSION
-	git commit -am "Inc Ver"
+	-git ci -am "Inc Ver"
 	git tag -f -F VERSION "v$$(cat VERSION)"
 	git push --tags origin develop
 	git co main
