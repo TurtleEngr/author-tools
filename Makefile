@@ -31,6 +31,10 @@ build : clean $(mUtilScripts)
 clean :
 	find . -name '*~' -exec rm {} \;
 
+update :
+	git co develop
+	git pull origin develop
+
 ci checkin : build
 	bin/incver.sh -p VERSION
 	-git ci -am Update
