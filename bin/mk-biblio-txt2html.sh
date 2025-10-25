@@ -157,6 +157,10 @@ cat <<\EOF
       href="bib.css" />
 </head>
 <body>
+<!-- From: https://github.com/filipegarcia/link-repair -->
+<!--
+<script src="https://filipegarcia.github.io/link-repair/main.js"></script>
+-->
 <h1>Bibliography</h1>
 <p>
 EOF
