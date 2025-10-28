@@ -17,6 +17,7 @@ mUtilScripts = \
 	bin/mksymlink \
 	bin/org2html.sh \
 	bin/rmnl \
+	bin/section-count \
 	bin/shfmt \
 	bin/shunit2 \
 	bin/shunit2.1 \
@@ -36,20 +37,20 @@ update :
 	git pull origin develop
 
 ci checkin : build
-	bin/incver.sh -p VERSION
+	bin/incver.sh -p -f bin/VERSION
 	-git ci -am Update
 
 save push : build
 	git co develop
 	git pull origin develop
-	bin/incver.sh -m VERSION
+	bin/incver.sh -m -f bin/VERSION
 	-git ci -am Update
 	git push --tags origin develop
 
 publish release : save
-	bin/incver.sh -M VERSION
+	bin/incver.sh -M -f bin/VERSION
 	-git ci -am "Inc Ver"
-	git tag -f -F VERSION "v$$(cat VERSION)"
+	git tag -f -F bin/VERSION "v$$(cat bin/VERSION)"
 	git push --tags origin develop
 	git co main
 	git pull origin main
