@@ -1,8 +1,8 @@
 #!/bin/bash
 # Usage:
-#   section-count -f FILE.org | section-pages > page-count.org
+#   section-pages -f FILE.org | section-pages > page-count.org
 
-# Modify output from "section-count". Append page count, if the word
+# Modify output from "section-pages". Append page count, if the word
 # count is > 2500
 
 cat <<\EOF >/tmp/sp.tmp
