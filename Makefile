@@ -22,7 +22,7 @@ mUtilScripts = \
 	bin/shunit2 \
 	bin/shunit2.1 \
 	bin/sort-para.sh \
-	bin/tag-collect.sh \
+	bin/tag-collect.sh
 
 # --------------------
 # Main Targets
